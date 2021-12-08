@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Borut" />
+    <link rel="stylesheet" type="text/css" href="Style2.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Naslov</title>
+
+    <script type="text/javascript">
+        $(function () {
+
+            causeRepaintsOn = $("h1, h2, h3, p, header, li, nav, ul");
+
+            $(window).resize(function () {
+                causeRepaintsOn.css("z-index", $(window).width());
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Domov</a></li>
+                <li>Vsebina</li>
+                <li>Viri</li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <section>
+            <h1>Stran našega predmeta je res top!</h1>
+        </section>
+
+        <section>
+            <h1>1. Odzivni dizajn</h1>
+            <p>
+                S pomočjo odzivnega dizajna lahko stran ustrezno prilagodimo za praktično vse naprave,
+                ki našo stran prikazujejo.
+            </p>
+        </section>
+
+        <section>
+            <h1>2. Arhitektura MVC</h1>
+            <p>
+                Ko želimo izdelati bolj kompleksne spletne aplikacije, uporabimo enega izmed standardnih
+                arhitekturnih pristopov. Prvi, ki ga bomo spoznali natančneje,
+                je pristop Model-Pogled-Krmilnik oziroma angleško <em>Model-View-Controller</em>.
+            </p>
+        </section>
+    </div>
+
+    <aside>
+        <picture>
+            <source srcset="Images/cat-small.png" media="(max-width: 762px)" />
+            <img src="Images/cat-big.jpg" alt="Slika" />
+        </picture>
+    </aside>
+
+    <footer>&copy; Razvoj spletnih vmesnikov, 2021</footer>
+</body>
+</html>

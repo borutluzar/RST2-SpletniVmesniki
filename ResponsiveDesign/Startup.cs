@@ -41,7 +41,7 @@ namespace ResponsiveDesign
             {
                 endpoints.Map("/", async context =>
                 {
-                    context.Response.Redirect("/StaticContent/Index.html");
+                    context.Response.Redirect("/StaticContent/Index3.html");
                 });
             });
         }
