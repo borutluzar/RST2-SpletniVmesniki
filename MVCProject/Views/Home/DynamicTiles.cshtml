@@ -1,0 +1,19 @@
+﻿@model List<MVCProject.Controllers.Flower>
+
+@{
+    ViewData["Title"] = "Dinamične Ploščice";
+}
+
+<div class="text-justify">
+    <h1 class="display-4">Naš dinamični pogled za uporabnika z imenom @ViewBag.UserName</h1>
+
+    <div class="tiling">
+        @foreach (var item in Model)
+        {
+            <div class="tile text-center" style="background-color:@item.Color">
+                @item.Name
+            </div>
+        }
+    </div>
+
+</div>

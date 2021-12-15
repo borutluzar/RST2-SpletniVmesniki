@@ -23,7 +23,26 @@ namespace MVCProject.Controllers
             return View();
         }
 
-        public IActionResult Tiles() => View();
+        public IActionResult Tiles()
+        {
+            return View();
+        }
+
+        public IActionResult DynamicTiles()
+        {
+            List<Flower> lstTiles = new List<Flower>() 
+            { 
+                new Flower(){Name="Tulipan", Color="black" },
+                new Flower(){Name="Vrtnica", Color="yellow" },
+                new Flower(){Name="Vijolica", Color="violet" },
+                new Flower(){Name="Mak", Color="red" },
+                new Flower(){Name="Trobentica", Color="orange" }
+            };
+
+            ViewBag.UserName = "Borut";
+
+            return View(lstTiles);
+        }
 
         public IActionResult Privacy()
         {
@@ -35,5 +54,12 @@ namespace MVCProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+    }
+
+    public struct Flower
+    {
+        public string Name { get; set; }
+
+        public string Color { get; set; }
     }
 }
