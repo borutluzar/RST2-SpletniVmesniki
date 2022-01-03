@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +24,11 @@ namespace MVCProject.Controllers
         // GET: Tiles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tiles.ToListAsync());
+            var list = await _context.Tiles.Where(x => x.DateInserted.Year >= DateTime.Now.Year)
+                            .Select(x => new TileViewIndex(){TileID = x.TileID, Title = x.Title, Content = x.Content, Description = x.Description, DateInserted = x.DateInserted })
+                            .ToListAsync();
+
+            return View(list);
         }
 
         // GET: Tiles/Details/5
@@ -40,10 +46,19 @@ namespace MVCProject.Controllers
                 return NotFound();
             }
 
+            // Prepare photo
+            if (tile.Photo != null && tile.Photo.Length > 0)
+            {
+                var base64 = Convert.ToBase64String(tile.Photo);
+                var imgSrc = String.Format($"data:image/gif;base64,{base64}");
+                ViewBag.ImgSrc = imgSrc;
+            }
+
             return View(tile);
         }
 
         // GET: Tiles/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -54,16 +69,41 @@ namespace MVCProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TileID,Title,Content,Description,DateInserted")] Tile tile)
+        public async Task<IActionResult> Create([Bind("Title,Content,Description")] Tile tile, IFormFile photo)
         {
             if (ModelState.IsValid)
             {
                 tile.TileID = Guid.NewGuid();
+                tile.DateInserted = DateTime.Now;
+                HandlePhoto<Tile>(tile, photo, 350);
+
                 _context.Add(tile);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tile);
+        }
+
+        private void HandlePhoto<T>(T @object, IFormFile photo, int thumbWidth)
+        {
+            if (photo != null)
+            {
+                if (!AuxiliaryFunctions.ValidImageTypes.Contains(photo.ContentType))
+                {
+                    ModelState.AddModelError("Photo", "Izberite fotografijo v eni izmed naslednjih oblik: BMP, GIF, JPG, or PNG.");
+                }
+                else
+                {
+                    using (var reader = new BinaryReader(photo.OpenReadStream()))
+                    {
+                        if (@object is Tile)
+                        {
+                            (@object as Tile).Photo = reader.ReadBytes((int)photo.Length);
+                            (@object as Tile).Thumb = AuxiliaryFunctions.CreateThumbnail((@object as Tile).Photo, thumbWidth);
+                        }
+                    }
+                }
+            }
         }
 
         // GET: Tiles/Edit/5

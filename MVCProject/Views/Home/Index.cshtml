@@ -1,18 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "RST rules";
+    ViewData["Title"] = "MVC Index";
 }
 
 <div class="text-justify">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
+    <h1>
+        @ViewData["Title"]
+    </h1>
     <h2>
-        Naslov moje strani je @ViewData["Title"].
-    </h2>
-    <h3>
         Povezava na <a asp-controller="Home" asp-action="Tiles">prvo stran</a>!
-    </h3>
-    <h3>
+    </h2>
+    <h2>
         Povezava na <a asp-controller="Home" asp-action="DynamicTiles">dinamično stran</a>!
-    </h3>
+    </h2>
+    <h2>
+        Povezava na <a asp-controller="Home" asp-action="DatabaseTiles">ploščice iz baze</a>!
+    </h2>
 </div>

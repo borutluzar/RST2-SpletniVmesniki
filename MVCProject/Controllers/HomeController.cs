@@ -12,10 +12,12 @@ namespace MVCProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MvcDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, MvcDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -42,6 +44,28 @@ namespace MVCProject.Controllers
             ViewBag.UserName = "Borut";
 
             return View(lstTiles);
+        }
+
+        public IActionResult DatabaseTiles()
+        {
+            ViewBag.TimeController = DateTime.Now;
+            // Create/retrieve flowers' context
+            //var flowers = _context.Tiles.ToList();
+
+            // Faster options:
+            //var flowers = _context.Tiles.Select(x => new TileView() { TileID = x.TileID, Title = x.Title, Thumb = x.Thumb, Photo = x.Photo }).ToList();
+            var flowers = _context.Tiles.Select(x => new TileViewPublic() { TileID = x.TileID, Title = x.Title, Thumb = x.Thumb }).ToList();
+
+            return View(flowers);
+        }
+
+        /// <summary>
+        /// Tole funkcijo kličemo z Ajaxom vsako sekundo 
+        /// in na ta način posodabljamo našo komponento
+        /// </summary>
+        public IActionResult ReloadLastItem(int counter)
+        {
+            return ViewComponent(nameof(ViewComponents.LastItem), new { counter = counter });
         }
 
         public IActionResult Privacy()

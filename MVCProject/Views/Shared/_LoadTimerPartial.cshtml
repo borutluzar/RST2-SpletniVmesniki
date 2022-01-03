@@ -1,0 +1,15 @@
+﻿<div class="text-left">
+    @{
+        if (ViewBag.TimeController == null)
+        {
+            <h3>You forgot to set the timer in the action. I need a value in 'ViewBag.TimeController'.</h3>
+        }
+        else
+        {
+            double ts = (DateTime.Now - (DateTime)ViewBag.TimeController).TotalSeconds;
+
+            <h1 class="display-4">Welcome on @ViewData["Title"]!</h1>
+            <h3>It took me @ts seconds to come here!</h3>
+        }
+    }
+</div>

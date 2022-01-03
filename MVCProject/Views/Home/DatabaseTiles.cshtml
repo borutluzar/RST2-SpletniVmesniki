@@ -1,0 +1,62 @@
+﻿@model List<MVCProject.Models.TileViewPublic>
+
+@{
+    ViewData["Title"] = "Ploščice iz baze";
+}
+
+
+@{await Html.RenderPartialAsync("_LoadTimerPartial");}
+
+
+<div class="row">
+    @foreach (var tile in Model)
+    {
+        <div class="col-xl-2 col-lg-3 col-md-4 text-center">
+            @tile.Title
+            <div class="w-100 h-100">
+                @{
+                    if (tile.Thumb != null && tile.Thumb.Length > 0)
+                    {
+                        var base64 = Convert.ToBase64String(tile.Thumb); // Lahko pošljemo Photo ali Thumb. V našem primeru je Thumb bolj smiseln
+                        string imgSrc = String.Format($"data:image/gif;base64,{base64}");
+                        <img src="@imgSrc" width="300" />
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div class="text-left">
+    @{
+        double ts2 = (DateTime.Now - (DateTime)ViewBag.TimeController).TotalSeconds;
+    }
+    <h3>It took me @ts2 seconds to finish loading!</h3>
+</div>
+
+
+<div id="lastItem">
+    @await Component.InvokeAsync(nameof(ViewComponents.LastItem), new { counter = 2 })
+</div>
+
+
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            setInterval(reloadLastItem, 1000);  // invoke load every second
+            reloadLastItem(); // load on initial page loaded
+        });
+
+    function reloadLastItem() {
+        $.ajax({
+        url: '@Url.Action("ReloadLastItem", "Home")',
+        data: { counter: 3 },
+        success: function (data) {
+                $("#lastItem").html(data);
+            }
+        })
+    }
+    </script>
+}
