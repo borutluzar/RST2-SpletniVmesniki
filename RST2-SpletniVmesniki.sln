@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1-ResponsiveDesign", "ResponsiveDesign\1-ResponsiveDesign.csproj", "{9E44240B-8296-40DD-8504-6379B7F6886A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1-ResponsiveDesign", "ResponsiveDesign\1-ResponsiveDesign.csproj", "{9E44240B-8296-40DD-8504-6379B7F6886A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2-MVCProject", "MVCProject\2-MVCProject.csproj", "{96C40CCE-37ED-465B-A971-62BD83A9A98B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2-MVCProject", "MVCProject\2-MVCProject.csproj", "{96C40CCE-37ED-465B-A971-62BD83A9A98B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProject.Server", "BlazorProject\Server\BlazorProject.Server.csproj", "{450E9FF1-1445-4A62-87CB-DD015F5F1E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProject.Client", "BlazorProject\Client\BlazorProject.Client.csproj", "{B441CA86-F3B9-435F-A469-EF64566D9F01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProject.Shared", "BlazorProject\Shared\BlazorProject.Shared.csproj", "{EEE21AD4-AE43-4033-9E54-89CFEF673351}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{96C40CCE-37ED-465B-A971-62BD83A9A98B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96C40CCE-37ED-465B-A971-62BD83A9A98B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96C40CCE-37ED-465B-A971-62BD83A9A98B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{450E9FF1-1445-4A62-87CB-DD015F5F1E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{450E9FF1-1445-4A62-87CB-DD015F5F1E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{450E9FF1-1445-4A62-87CB-DD015F5F1E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{450E9FF1-1445-4A62-87CB-DD015F5F1E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B441CA86-F3B9-435F-A469-EF64566D9F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B441CA86-F3B9-435F-A469-EF64566D9F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B441CA86-F3B9-435F-A469-EF64566D9F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B441CA86-F3B9-435F-A469-EF64566D9F01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE21AD4-AE43-4033-9E54-89CFEF673351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE21AD4-AE43-4033-9E54-89CFEF673351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE21AD4-AE43-4033-9E54-89CFEF673351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE21AD4-AE43-4033-9E54-89CFEF673351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

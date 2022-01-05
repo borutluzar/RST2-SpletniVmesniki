@@ -1,0 +1,58 @@
+﻿@page "/subjects"
+@inject ISubjectsService subjectsService
+@inject NavigationManager navManager
+
+<h1>Moji najljubši predmeti</h1>
+
+@if (subjectsService.Subjects == null || subjectsService.Subjects.Count == 0)
+{
+    <div class="alert-info">
+        There are no subjects listed!
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var subject in subjectsService.Subjects)
+        {
+            string link = $"subject/{@subject.ID}";
+            <div class="col col-md-6">
+                <div class="alert-info" style="border:1px solid blue; box-sizing:border-box; margin:5px; padding:5px;">
+                    <h2><NavLink href='@link'>@subject.Name</NavLink></h2>
+                    <p class="justify-content-between">
+                        @subject.Description
+                    </p>
+                    <p class="small">
+                        Lecture Hours: @subject.LectureHours,
+                        Tutorial Hours: @subject.TutorialHours,
+                        ECTS: @subject.ECTS
+                    </p>
+                    <p>
+                        <button class="btn btn-dark" @onclick="() => SubjectDetails(subject.ID)">Details</button>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<CreateSubject></CreateSubject>
+
+@code
+{
+    protected override async Task OnParametersSetAsync()
+    {
+        await subjectsService.GetSubjects();
+        subjectsService.OnChange += StateHasChanged;
+    }
+
+    protected void SubjectDetails(int id)
+    {
+        navManager.NavigateTo($"subject/{id}");
+    }
+
+    protected void Dispose()
+    {
+        subjectsService.OnChange -= StateHasChanged;
+    }
+}

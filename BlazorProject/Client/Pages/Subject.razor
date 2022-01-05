@@ -1,0 +1,41 @@
+﻿@page "/subject/{id:int}"
+@inject ISubjectsService subjectsService
+
+
+@if (subject == null)
+{
+    <div class="alert-info">
+        There is no such subject!        
+    </div>
+}
+else
+{
+    <div class="alert-info">
+        <h1>@subject.Name</h1>
+        <p>
+            @subject.Description
+        </p>
+    </div>
+}
+
+@code
+{
+    //Objekt, iz katerega preberemo lastnosti na strani
+    BlazorProject.Shared.Subject subject;
+
+    // Za parameter moramo narediti lastnost, sicer
+    // atribut Parameter ne deluje
+    [Parameter]
+    public int Id { get; set; }
+
+    /// <summary>
+    /// Uporabimo OnParametersSet, ker se izvede pred zaključkom inicializacije
+    /// in tako dobimo pravo vrednost parametra
+    /// </summary>
+    protected override async Task<BlazorProject.Shared.Subject> OnParametersSetAsync()
+    {
+        // Parameter za API klic pridobimo iz lastnosti
+        subject = await subjectsService.GetSubject(Id);
+        return subject;
+    }
+}

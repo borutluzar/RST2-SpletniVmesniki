@@ -1,0 +1,52 @@
+﻿@inject ISubjectsService subjectsService
+
+<div class="alert-link" style="max-width:50%;">
+    <h3>Create new subject</h3>
+
+    <EditForm Model="Subject" OnSubmit="HandleSubmit">
+        <div class="form-group">
+            <label for="name">Ime:</label>
+            <InputText id="name" class="form-control" @bind-Value="Subject.Name"></InputText>
+            <ValidationMessage For="@(() => Subject.Name)" />
+        </div>
+        <div class="form-group">
+            <label for="desc">Opis:</label><br />
+            <InputTextArea id="desc" class="form-control" @bind-Value="Subject.Description"></InputTextArea>
+        </div>
+        <div class="form-group">
+            <label for="lecH">Ure predavanj:</label><br />
+            <InputNumber id="lecH" class="form-control" @bind-Value="Subject.LectureHours"></InputNumber>
+        </div>
+        <div class="form-group">
+            <label for="tutH">Ure vaj:</label><br />
+            <InputNumber id="tutH" class="form-control" @bind-Value="Subject.TutorialHours"></InputNumber>
+        </div>
+        <div class="form-group">
+            <label for="ects">ECTS:</label><br />
+            <InputNumber id="ects" class="form-control" @bind-Value="Subject.ECTS"></InputNumber>
+        </div>
+        <button class="btn btn-primary" type="submit">Ustvari</button>
+    </EditForm>
+</div>
+
+@code
+{
+    public Subject Subject { get; set; } = new Subject();
+
+    protected async Task HandleSubmit()
+    {
+        Console.WriteLine("Form submitted!");
+        Console.WriteLine(Subject.Name);
+
+        await subjectsService.CreateSubject(Subject);
+    }
+
+    protected override void OnInitialized()
+    {
+        subjectsService.OnChange += StateHasChanged;
+    }
+    protected void Dispose()
+    {
+        subjectsService.OnChange -= StateHasChanged;
+    }
+}
