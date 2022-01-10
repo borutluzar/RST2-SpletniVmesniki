@@ -1,0 +1,65 @@
+﻿@page "/conference/{id:guid}/{edit:bool}"
+@inject IEntityCRUDService<BlazorProject.Shared.Conference, Guid> conferencesService
+
+
+@if (conference == null && !Edit)
+{
+    <div class="alert-info">
+        There is no such subject!
+    </div>
+}
+else if (!Edit)
+{
+    <div class="alert-info">
+        <h1>@conference.TalkTitle</h1>
+        <p>
+            @conference.Remark
+        </p>
+        <p class="small">
+            Kraj konference: @conference.Place,
+            Datum predstavitve: @conference.PresentationDate
+        </p>
+    </div>
+}
+else
+{
+    <CreateConference Conference="@conference" Title="@Title" SubmitButtonText="@SubmitButtonText"></CreateConference>
+}
+
+@code
+{
+    //Objekt, iz katerega preberemo lastnosti na strani
+    BlazorProject.Shared.Conference conference = new();
+
+    // Za parameter moramo narediti lastnost, sicer
+    // atribut Parameter ne deluje
+    [Parameter]
+    public Guid Id { get; set; }
+
+    [Parameter]
+    public bool Edit { get; set; }
+
+    public string Title { get; set; }
+    public string SubmitButtonText { get; set; }
+
+    /// <summary>
+    /// Uporabimo OnParametersSet, ker se izvede pred zaključkom inicializacije
+    /// in tako dobimo pravo vrednost parametra
+    /// </summary>
+    protected override async Task<BlazorProject.Shared.Conference> OnParametersSetAsync()
+    {
+        if (Id != Guid.Empty)
+        {
+            // Parameter za API klic pridobimo iz lastnosti
+            conference = await conferencesService.GetEntity(Id);
+            Title = "Posodobi konferenco";
+            SubmitButtonText = "Posodobi";
+        }
+        else
+        {
+            Title = "Dodaj novo konferenco";
+            SubmitButtonText = "Dodaj";
+        }
+        return conference;
+    }
+}

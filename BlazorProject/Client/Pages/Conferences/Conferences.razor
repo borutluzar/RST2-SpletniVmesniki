@@ -1,0 +1,69 @@
+﻿@page "/conferences"
+@inject IEntityCRUDService<BlazorProject.Shared.Conference,Guid> conferencesService
+@inject NavigationManager navManager
+
+<h1>Konference</h1>
+
+<p>
+    <button class="btn btn-dark" @onclick="() => EntityDetails(Guid.Empty, true)">Dodaj novo</button>
+</p>
+@if (conferencesService.Entities == null || conferencesService.Entities.Count == 0)
+{
+    <div class="alert-info">
+        There are no subjects listed!
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var conference in conferencesService.Entities)
+        {
+            string link = $"conference/{@conference.ID}/{false}";
+            <div class="col col-md-6">
+                <div class="alert-info" style="border:1px solid blue; box-sizing:border-box; margin:5px; padding:5px;">
+                    <h2><NavLink href='@link'>@conference.TalkTitle</NavLink></h2>
+                    <p class="justify-content-between">
+                        @conference.Place
+                    </p>
+                    <p class="small">
+                        Datum predavanja: @conference.PresentationDate,
+                    </p>
+                    <p>
+                        <button class="btn btn-dark" @onclick="() => EntityDetails(conference.ID, false)">Podrobnosti</button>
+                        <button class="btn btn-dark" @onclick="() => EntityDetails(conference.ID, true)">Uredi</button>
+                        <button class="btn btn-dark" @onclick="() => EntityDelete(conference.ID)">Izbriši</button>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code
+{
+    BlazorProject.Shared.Conference conferenceToEdit = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await conferencesService.GetEntities(); 
+        conferencesService.OnChange += StateHasChanged;
+    }
+
+    protected void EntityDetails(Guid id, bool edit)
+    {
+        Console.WriteLine("Tukaj");
+        navManager.NavigateTo($"conference/{id}/{edit}");
+    }
+
+    protected async void EntityDelete(Guid id)
+    {
+        await conferencesService.DeleteEntity(id);
+        conferencesService.OnChange += StateHasChanged;
+    }
+
+    protected void Dispose()
+    {
+        conferencesService.OnChange -= StateHasChanged;
+    }
+}

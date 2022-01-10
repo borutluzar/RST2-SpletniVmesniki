@@ -1,7 +1,8 @@
 ﻿@inject ISubjectsService subjectsService
+@inject NavigationManager navManager
 
 <div class="alert-link" style="max-width:50%;">
-    <h3>Create new subject</h3>
+    <h3>@Title</h3>
 
     <EditForm Model="Subject" OnSubmit="HandleSubmit">
         <div class="form-group">
@@ -25,28 +26,43 @@
             <label for="ects">ECTS:</label><br />
             <InputNumber id="ects" class="form-control" @bind-Value="Subject.ECTS"></InputNumber>
         </div>
-        <button class="btn btn-primary" type="submit">Ustvari</button>
+        <button class="btn btn-primary" type="submit">@SubmitButtonText</button>
+        <button class="btn btn-primary" type="button" @onclick="HandleCancel">Prekliči</button>
     </EditForm>
 </div>
 
 @code
 {
-    public Subject Subject { get; set; } = new Subject();
+    [Parameter]
+    public BlazorProject.Shared.Subject Subject { get; set; } = new BlazorProject.Shared.Subject();
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string SubmitButtonText { get; set; }
 
     protected async Task HandleSubmit()
     {
-        Console.WriteLine("Form submitted!");
-        Console.WriteLine(Subject.Name);
+        Console.WriteLine($"Calling subject with ID = {Subject.ID}");
+        if (Subject.ID == 0)
+            await subjectsService.CreateSubject(Subject);
+        else
+            await subjectsService.UpdateSubject(Subject, Subject.ID);
+        navManager.NavigateTo("/subjects");
+    }
 
-        await subjectsService.CreateSubject(Subject);
+    protected void HandleCancel()
+    {
+        navManager.NavigateTo("/subjects");
     }
 
     protected override void OnInitialized()
     {
-        subjectsService.OnChange += StateHasChanged;
+        //subjectsService.OnChange += StateHasChanged;
     }
     protected void Dispose()
     {
-        subjectsService.OnChange -= StateHasChanged;
+        //subjectsService.OnChange -= StateHasChanged;
     }
 }

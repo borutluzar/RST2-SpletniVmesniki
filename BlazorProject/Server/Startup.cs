@@ -1,11 +1,14 @@
+using BlazorProject.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace BlazorProject.Server
 {
@@ -22,9 +25,14 @@ namespace BlazorProject.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
+                //.AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); // Dodamo, èe želimo, da brisanje deluje
             services.AddRazorPages();
+
+            // Dodamo, ko želimo povezovanje z bazo
+            services.AddDbContext<BlazorDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("BlazorConnectionString")) // Connection string preberemo iz appsetting.json datoteke
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

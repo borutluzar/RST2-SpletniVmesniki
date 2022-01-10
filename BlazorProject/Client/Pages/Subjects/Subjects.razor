@@ -4,6 +4,9 @@
 
 <h1>Moji najljubši predmeti</h1>
 
+<p>
+    <button class="btn btn-dark" @onclick="() => SubjectDetails(0, true)">Dodaj nov</button>
+</p>
 @if (subjectsService.Subjects == null || subjectsService.Subjects.Count == 0)
 {
     <div class="alert-info">
@@ -15,7 +18,7 @@ else
     <div class="row">
         @foreach (var subject in subjectsService.Subjects)
         {
-            string link = $"subject/{@subject.ID}";
+            string link = $"subject/{@subject.ID}/{false}";
             <div class="col col-md-6">
                 <div class="alert-info" style="border:1px solid blue; box-sizing:border-box; margin:5px; padding:5px;">
                     <h2><NavLink href='@link'>@subject.Name</NavLink></h2>
@@ -23,12 +26,14 @@ else
                         @subject.Description
                     </p>
                     <p class="small">
-                        Lecture Hours: @subject.LectureHours,
-                        Tutorial Hours: @subject.TutorialHours,
+                        Ure predavanj: @subject.LectureHours,
+                        Ure vaj: @subject.TutorialHours,
                         ECTS: @subject.ECTS
                     </p>
                     <p>
-                        <button class="btn btn-dark" @onclick="() => SubjectDetails(subject.ID)">Details</button>
+                        <button class="btn btn-dark" @onclick="() => SubjectDetails(subject.ID, false)">Podrobnosti</button>
+                        <button class="btn btn-dark" @onclick="() => SubjectDetails(subject.ID, true)">Uredi</button>
+                        <button class="btn btn-dark" @onclick="() => SubjectDelete(subject.ID)">Izbriši</button>
                     </p>
                 </div>
             </div>
@@ -36,23 +41,30 @@ else
     </div>
 }
 
-<CreateSubject></CreateSubject>
-
 @code
 {
-    protected override async Task OnParametersSetAsync()
+    BlazorProject.Shared.Subject subjectToEdit = new();
+
+
+    protected override async Task OnInitializedAsync()
     {
         await subjectsService.GetSubjects();
         subjectsService.OnChange += StateHasChanged;
     }
 
-    protected void SubjectDetails(int id)
+    protected void SubjectDetails(int id, bool edit)
     {
-        navManager.NavigateTo($"subject/{id}");
+        navManager.NavigateTo($"subject/{id}/{edit}");
+    }
+
+    protected async void SubjectDelete(int id)
+    {
+        await subjectsService.DeleteSubject(id);
+        subjectsService.OnChange += StateHasChanged;
     }
 
     protected void Dispose()
     {
-        subjectsService.OnChange -= StateHasChanged;
+        //subjectsService.OnChange -= StateHasChanged;
     }
 }

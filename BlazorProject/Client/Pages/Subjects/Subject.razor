@@ -1,0 +1,65 @@
+﻿@page "/subject/{id:int}/{edit:bool}"
+@inject ISubjectsService subjectsService
+
+
+@if (subject == null && !Edit)
+{
+    <div class="alert-info">
+        There is no such subject!
+    </div>
+}
+else if (!Edit)
+{
+    <div class="alert-info">
+        <h1>@subject.Name</h1>
+        <p>
+            @subject.Description
+        </p>
+        <p class="small">
+            Ure predavanj: @subject.LectureHours,
+            Ure vaj: @subject.TutorialHours,
+            ECTS: @subject.ECTS
+        </p>
+    </div>
+}
+else
+{
+    <CreateSubject Subject="@subject" Title="@Title" SubmitButtonText="@SubmitButtonText"></CreateSubject>
+}
+
+@code
+{
+    //Objekt, iz katerega preberemo lastnosti na strani
+    BlazorProject.Shared.Subject subject = new();
+
+    // Za parameter moramo narediti lastnost, sicer
+    // atribut Parameter ne deluje
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public bool Edit { get; set; }
+
+    public string Title { get; set; }
+    public string SubmitButtonText { get; set; }
+
+    /// <summary>
+    /// Uporabimo OnParametersSet, ker se izvede pred zaključkom inicializacije
+    /// in tako dobimo pravo vrednost parametra
+    /// </summary>
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != 0)
+        {
+            // Parameter za API klic pridobimo iz lastnosti
+            subject = await subjectsService.GetSubject(Id);
+            Title = "Posodobi predmet";
+            SubmitButtonText = "Posodobi";
+        }
+        else
+        {
+            Title = "Dodaj nov predmet";
+            SubmitButtonText = "Dodaj";
+        }
+    }
+}

@@ -1,7 +1,7 @@
 ﻿using BlazorProject.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BlazorProject.Client.Services
@@ -12,7 +12,11 @@ namespace BlazorProject.Client.Services
 
         Task<Subject> GetSubject(int id);
 
-        Task<List<Subject>> CreateSubject(Subject subject);
+        Task<HttpResponseMessage> DeleteSubject(int id);
+
+        Task CreateSubject(Subject subject);
+
+        Task UpdateSubject(Subject subject, int id);
 
         List<Subject> Subjects { get; set; }
 

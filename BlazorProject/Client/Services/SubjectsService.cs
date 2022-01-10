@@ -22,7 +22,7 @@ namespace BlazorProject.Client.Services
 
         public async Task<List<Subject>> GetSubjects()
         {
-            Subjects = await _client.GetFromJsonAsync<List<Subject>>("api/subjects");
+            Subjects = await _client.GetFromJsonAsync<List<Subject>>("api/subjects"); 
             return Subjects;
         }
 
@@ -31,12 +31,22 @@ namespace BlazorProject.Client.Services
             return await _client.GetFromJsonAsync<Subject>($"api/subjects/{id}");
         }
 
-        public async Task<List<Subject>> CreateSubject(Subject subject)
+        public async Task CreateSubject(Subject subject)
         {
-            var result = await _client.PostAsJsonAsync<Subject>($"api/subjects", subject);
-            Subjects = await result.Content.ReadFromJsonAsync<List<Subject>>();
+            await _client.PostAsJsonAsync<Subject>($"api/subjects", subject);
+        }
+
+        public async Task UpdateSubject(Subject subject, int id)
+        {
+            await _client.PutAsJsonAsync<Subject>($"api/subjects/{id}", subject);
+        }
+
+        public async Task<HttpResponseMessage> DeleteSubject(int id)
+        {
+            var result = await _client.DeleteAsync($"api/subjects/{id}");
+            Subjects = await GetSubjects();
             OnChange.Invoke();
-            return Subjects;
+            return result;
         }
     }
 }
